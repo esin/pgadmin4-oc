@@ -18,7 +18,10 @@ jobs:
         env:
           DOCKER_USER: ${{ secrets.DOCKERHUB_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        run: echo ${{ secrets.DOCKERHUB_CONFIG }} > $HOME/.docker/config.json
+        run: |
+          cat > $HOME/.docker/config.json << EOL
+          ${{ secrets.DOCKERHUB_CONFIG }}
+          EOL
         
       - name: Push Docker image
         run: |
