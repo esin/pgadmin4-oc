@@ -19,6 +19,7 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKERHUB_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
+          mkdir $HOME/.docker
           cat > $HOME/.docker/config.json << EOL
           ${{ secrets.DOCKERHUB_CONFIG }}
           EOL
