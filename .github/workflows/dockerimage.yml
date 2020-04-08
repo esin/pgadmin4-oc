@@ -16,7 +16,7 @@ jobs:
       
       - name: Login to Docker registry
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USER }}
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: docker login
         
