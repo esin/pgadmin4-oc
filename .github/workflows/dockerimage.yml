@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master, develop ]
+
+jobs: 
+  push:
+    runs-on: [ubuntu-latest]
+    if: github.event_name == 'push'
+    steps:
+      
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag pgadmin4-oc
+      
+      - name: Login to Docker registry
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASSWORD
+        
+      - name: Push Docker image
+        run: |
+          IMAGEVERSION=$(date +%y%m%d%H%M)
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [ "$VERSION" == "master" ] && IMAGEVERSION=latest
+          docker tag pgadmin4-oc es1n/pgadmin4-oc:$IMAGEVERSION
+          docker push es1n/pgadmin4-oc:$IMAGEVERSION
+          
